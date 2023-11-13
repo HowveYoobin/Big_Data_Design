@@ -1,4 +1,5 @@
-# Team-project w.PCH, CSK, PJC, KYJ
+# Team Project
+## Contriutors: PCH, CSK, PJC, and KYJ
 ## Vertiport Placement in Gyeongsangbuk-do and Daegu for efficient middle-mile consignment of the fresh food
 
 ### Progress
