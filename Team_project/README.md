@@ -1,6 +1,8 @@
 # Team Project
 ## Contriutors: PCH, CSK, PJC, and KYJ
 ## Vertiport Placement in Gyeongsangbuk-do and Daegu for efficient middle-mile consignment of the fresh food
+---
+mapping.ipynb -> https://nbviewer.org/github/HowveYoobin/Big_Data_Design/blob/main/Team_project/mapping.ipynb
 
 ### Progress
 1. Background Research
