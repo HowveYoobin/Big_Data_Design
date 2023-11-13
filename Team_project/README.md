@@ -5,7 +5,7 @@
 ### Progress
 1. Background Research
 2. Scoped down project topic and collected data.
-3. Mapped prohibited-, restricted-, dangered- flight area on the map of Gyeongsangbuk-do and Daegu.
+3. Mapped prohibited-, restricted-, dangered- flight area on the map of Gyeongsangbuk-do and Daegu with Vworld API.
     <figure>
     <img src="no_flight_plt.png" alt="No-flight zones"/>
     <figcaption>Figure 1. No-flight zones(matplotlib)</figcaption>
