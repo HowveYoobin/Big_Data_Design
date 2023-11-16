@@ -11,6 +11,7 @@ mapping.ipynb -> https://nbviewer.org/github/HowveYoobin/Big_Data_Design/blob/ma
     <figure>
     <img src="no_flight_plt.png" alt="No-flight zones"/>
     <figcaption>Figure 1. No-flight zones(matplotlib)</figcaption>
+        #### Label을 그림 위에 나타내도록 하고, 울릉도는 날리기 (동해쪽의 비행제한, 금지 구역은 삭제)
     <img src="no_flight_folium.png" alt="No-flight zones"/>
     <figcaption>Figure 2. No-flight zones(Folium)</figcaption>
     </figure>
