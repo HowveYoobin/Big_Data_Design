@@ -32,7 +32,7 @@ class GetData:
         self.size = "1000"
         self.page = "1"
         # self.attrFilter = "ctp_kor_nm:=:대구광역시"
-        self.geomFilter = "BOX(128.1198, 35.6516, 130.8899, 37.4835)" # 128.1198, 35.6516, 130.8899, 37.4835
+        self.geomFilter = "BOX(128.1198, 35.6516, 129.5, 37.069)" # 128.1198, 35.6516, 130.8899, 37.4835
         self.geometry = "true"
         self.attribute = "true"
         self.buffer = "10"
@@ -159,27 +159,28 @@ class GetData:
         
         return coord_array
          
-    # plt로 나타내기 (한반도 지도 업데이트 필요)
+    # plt로 나타내기
     def plt_visualize(self, *lon_lat_dicts, save = False):
         fig,ax = plt.subplots(figsize=(12,12))
 
         # 배경 지도(경북, 대구) 그리기
         self.geo.boundary.plot(ax=ax, linewidth=1, colors = 'black')
-        ax.set_title("경상북도 및 대구 지역 비행구역")
+        ax.set_title("경상북도 및 대구 지역 비행구역", fontsize=20)
+        ax.set_xlim(127.5, 130)
+        ax.set_ylim(35.5, 37.3)
 
         colors = ["red", "blue", "green", "purple"]
         i = -1
-        legend_labels = []
+        # legend_labels = []
 
         # 비행 구역 그리기
         for dict in lon_lat_dicts:
             i += 1
             coord_array = self.coord_array(dict)
             for region in coord_array.keys():
-                legend_labels.append(f"{colors[i]}: {region}")
+                # legend_labels.append(f"{colors[i]}: {region}")
                 ax.plot(coord_array[str(region)][0], coord_array[str(region)][1], c = colors[i])
         
-        plt.legend(legend_labels)
         plt.show()
         
         if save == True:
