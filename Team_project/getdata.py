@@ -169,7 +169,7 @@ class GetData:
         ax.set_xlim(127.5, 130)
         ax.set_ylim(35.5, 37.3)
 
-        colors = ["red", "blue", "green", "purple"]
+        colors = ["green", "red", "blue",  "purple"]
         i = -1
         # legend_labels = []
 
@@ -180,6 +180,15 @@ class GetData:
             for region in coord_array.keys():
                 # legend_labels.append(f"{colors[i]}: {region}")
                 ax.plot(coord_array[str(region)][0], coord_array[str(region)][1], c = colors[i])
+                # 주석 달기
+                coord = [round(np.mean(coord_array[str(region)][0]),2), round(np.mean(coord_array[str(region)][1]), 2)]
+                if "P" in  str(region) and "A" in str(region):
+                    coord[1] = coord[1] + 0.1
+                elif "P" in  str(region)  and "B" in str(region):
+                    coord[1] = coord[1] - 0.1
+                elif "155A" in  str(region):
+                    coord[1] = coord[1] - 0.03
+                ax.annotate(str(region), xy = (coord[0], coord[1]), color = "black")    
         
         plt.show()
         
