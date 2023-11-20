@@ -15,10 +15,16 @@ mapping.ipynb -> https://nbviewer.org/github/HowveYoobin/Big_Data_Design/blob/ma
     <img src="no_flight_folium.png" alt="No-flight zones"/>
     <figcaption>Figure 2. No-flight zones(Folium)</figcaption>
     </figure>
+    
+    <figure>
+    <img src="no_ulleung.png" alt="no_ulleung"/>
+    <figcaption>Figure 3. No-flight zones in Daegu and Gyeongsangbuk-do</figcaption>
+    </figure>
+    
 4. Marked locations with slopes more than 26 degrees on the map with QGIS.
     <figure>
     <img src="slope.png" alt="slope > 26"/>
-    <figcaption>Figure 3. No-flight zones(matplotlib)</figcaption>
+    <figcaption>Figure 4. No-flight zones(matplotlib)</figcaption>
     </figure>  
     * QGIS를 가지고 capability를 만들어오기.
 5. Finding out the relationship between warehouse size and the amount of delivery traffic in Hwaseong.
