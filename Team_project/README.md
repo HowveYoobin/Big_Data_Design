@@ -17,9 +17,10 @@ mapping.ipynb -> https://nbviewer.org/github/HowveYoobin/Big_Data_Design/blob/ma
     </figure>
     
     <figure>
-    <img src="no_ulleung.png" alt="no_ulleung"/>
+    <img src="no_ulleung_label.png" alt="no_ulleung"/>
     <figcaption>Figure 3. No-flight zones in Daegu and Gyeongsangbuk-do</figcaption>
     </figure>
+
     
 4. Marked locations with slopes more than 26 degrees on the map with QGIS.
     <figure>
