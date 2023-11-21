@@ -27,7 +27,3 @@ mapping.ipynb -> https://nbviewer.org/github/HowveYoobin/Big_Data_Design/blob/ma
    * Reducing computational cost by using server
   
 6. 기체 선정 및 middle mile에서 UAM의 필요성
-    * alia의 Travel time 추정 필요
-          1. 가격
-          2. tavel time
-    * 기아 트럭에 맞춘 travel time/ traffic은 카카오네비 api 등을 이용해서 충분히 계산할 수 있을 것
