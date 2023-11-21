@@ -9,14 +9,8 @@ mapping.ipynb -> https://nbviewer.org/github/HowveYoobin/Big_Data_Design/blob/ma
 2. Scoped down project topic and collected data.
 3. Mapped prohibited-, restricted-, dangered- flight area on the map of Gyeongsangbuk-do and Daegu with Vworld API.
     <figure>
-    <img src="no_flight_plt.png" alt="No-flight zones"/>
-    <figcaption>Figure 1. No-flight zones(matplotlib)</figcaption>  
-        
-    <img src="no_flight_folium.png" alt="No-flight zones"/>
-    <figcaption>Figure 2. No-flight zones(Folium)</figcaption>
-
     <img src="no_ulleung_label.png" alt="no_ulleung"/>
-    <figcaption>Figure 3. No-flight zones in Daegu and Gyeongsangbuk-do</figcaption>
+    <figcaption>Figure 3. No-flight zones in Daegu and Gyeongsangbuk-do(without Ulleung-do</figcaption>
     </figure>
     
 4. Marked locations with slopes more than 26 degrees on the map with QGIS.
