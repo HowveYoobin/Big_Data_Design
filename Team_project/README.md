@@ -8,7 +8,7 @@ See visualized results of `mapping.ipynb` [here](https://nbviewer.org/github/How
 ### 3. Mapped prohibited-, restricted-, and dangered- flight areas on the map of Gyeongsangbuk-do(w.o. Ulleung-do) and Daegu with Vworld API.  
 <figure>
     <img src="./figures/no_ulleung_label.png" alt="No-flight zones"/>
-    <figcaption><B>Figure 1.</B> No-flight zones in Daegu and Gyeongsangbuk-do(w.o. Ulleung-do</figcaption>
+    <figcaption><B>Figure 1.</B> No-flight zones in Daegu and Gyeongsangbuk-do(w.o. Ulleung-do)</figcaption>
     </figure>
 
 ### 4. Marked locations with high slopes according to EASA vertiport guidelines on the map with QGIS and python.
