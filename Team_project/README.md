@@ -24,19 +24,10 @@ See results of `mapping.ipynb` in [here](https://nbviewer.org/github/HowveYoobin
     </figure> 
 
 ### 5. Marked warehouses in Daegu and Gyeongsangbuk-do, new-TK airport, and places with high slopes by matplotlib.pyplot.
-    |"./figures/warehouse+airport.png"|"./figures/warehouse+airport+slope.png"|
-    |--|--|
-    
-    <figure class="half">  
-    <a href="link"><img src="./figures/warehouse+airport.png" alt="warehouse+airport"></a>  
-    <a href="link"><img src="./figures/warehouse+airport+slope.png" alt="warehouse+airport+slope"></a>
-    <figcaption>**Figure 4.** Locations of the warehouses(blue point) and new TK airport(star) were marked on the left map. The places with unavailable slopes(gray point) were marked on the right map.</figcaption>
-    </figure>
-
 <p align="center">
   <img src="./figures/warehouse+airport.png" align="center" width="49%">
   <img src="./figures/warehouse+airport+slope.png" align="center" width="49%">
-  <figcaption align="center">2개 이미지 띄우기</figcaption>
+  <figcaption align="center">**Figure 4.** Locations of the warehouses(blue point) and new TK airport(star) were marked on the left map. The places with unavailable slopes(gray point) were marked on the right map.</figcaption>
 </p>
 
 6. Finding out the relationship between warehouse size and the amount of delivery traffic in Hwaseong.
