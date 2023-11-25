@@ -33,7 +33,13 @@ See results of `mapping.ipynb` in [here](https://nbviewer.org/github/HowveYoobin
     <figcaption>**Figure 4.** Locations of the warehouses(blue point) and new TK airport(star) were marked on the left map. The places with unavailable slopes(gray point) were marked on the right map.</figcaption>
     </figure>
 
-5. Finding out the relationship between warehouse size and the amount of delivery traffic in Hwaseong.
+<p align="center">
+  <img src="./figures/warehouse+airport.png" align="center" width="49%">
+  <img src="./figures/warehouse+airport+slope.png" align="center" width="49%">
+  <figcaption align="center">2개 이미지 띄우기</figcaption>
+</p>
+
+6. Finding out the relationship between warehouse size and the amount of delivery traffic in Hwaseong.
    * Reducing computational cost by using server
   
 6. 기체 선정 및 middle mile에서 UAM의 필요성
