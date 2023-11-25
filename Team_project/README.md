@@ -23,6 +23,9 @@ mapping.ipynb -> https://nbviewer.org/github/HowveYoobin/Big_Data_Design/blob/ma
     <img src="slope_python.png" alt="slope by python"/>
     <figcaption>Figure 5. Python slopes (matplotlib)</figcaption>
     </figure> 
+
+5. Marked 
+
 5. Finding out the relationship between warehouse size and the amount of delivery traffic in Hwaseong.
    * Reducing computational cost by using server
   
