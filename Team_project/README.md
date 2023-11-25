@@ -24,6 +24,9 @@ See results of `mapping.ipynb` in [here](https://nbviewer.org/github/HowveYoobin
     </figure> 
 
 ### 5. Marked warehouses in Daegu and Gyeongsangbuk-do, new-TK airport, and places with high slopes by matplotlib.pyplot.
+    |"./figures/warehouse+airport.png"|"./figures/warehouse+airport+slope.png"|
+    |--|--|
+    
     <figure class="half">  
     <a href="link"><img src="./figures/warehouse+airport.png" alt="warehouse+airport"></a>  
     <a href="link"><img src="./figures/warehouse+airport+slope.png" alt="warehouse+airport+slope"></a>
