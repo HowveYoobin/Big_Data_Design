@@ -45,9 +45,9 @@ See visualized results of `mapping.ipynb` [here](https://nbviewer.org/github/How
 </p>
 
 <p align="center">
-  <img src="./figures/centroid1.png" alt="Vertiport candidate 1" align="center" width="33%">
-  <img src="./figures/centroid2.png" alt="Vertiport candidate 2" align="center" width="33%">
-  <img src="./figures/centroid2.png" alt="Vertiport candidate 3" align="center" width="33%">
+  <img src="./figures/centroid1.png" alt="Vertiport candidate 1" align="center" width="40%">
+  <img src="./figures/centroid2.png" alt="Vertiport candidate 2" align="center" width="40%">
+  <img src="./figures/centroid3.png" alt="Vertiport candidate 3" align="center" width="40%">
   <figcaption align="center"><B>Figure 7.</B> Detailed locations of 3 vertiport candidates.</figcaption>
 </p>
 
