@@ -2,7 +2,7 @@
 ## Goal: Vertiport Placement in Gyeongsangbuk-do and Daegu for efficient middle-mile consignment of fresh food
 See visualized results of `mapping.ipynb` [here](https://nbviewer.org/github/HowveYoobin/Big_Data_Design/blob/main/Team_project/mapping.ipynb)  
 
-1. [Completed](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Team_project/README.md#completed)
+1. [Completed](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Team_project/README.md#completed)  
    1.1. [Background Research](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Team_project/README.md#1-background-research)  
    1.2. [Scoped down the project topic and collected related data](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Team_project/README.md#2-scoped-down-the-project-topic-and-collected-related-data)  
    1.3. [Mapped prohibited-, restricted-, and dangered- flight areas on the map of Gyeongsangbuk-do(w.o. Ulleung-do) and Daegu with Vworld API.](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Team_project/README.md#3-mapped-prohibited--restricted--and-dangered--flight-areas-on-the-map-of-gyeongsangbuk-dowo-ulleung-do-and-daegu-with-vworld-api)  
