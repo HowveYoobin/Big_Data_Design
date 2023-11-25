@@ -41,7 +41,7 @@ See visualized results of `mapping.ipynb` [here](https://nbviewer.org/github/How
 * Detailed inspection for selected vertiport candidates by folium.
 <p align="center">
   <img src="./figures/Kmean3_folium.png" alt="Kmeans result(K=3) visualized by folium" align="center">
-  <figcaption align="center"><B>Figure 6.</B>. Selected Vertiport candidates marked on folium map. Star(red) = vertiport candidates. Plane(blue) = TK new airport</figcaption>
+  <figcaption align="center"><B>Figure 6.</B> Selected Vertiport candidates marked on folium map. Star(red) = vertiport candidates. Plane(blue) = TK new airport</figcaption>
 </p>
 
 <p align="center">
