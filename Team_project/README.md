@@ -20,7 +20,7 @@ See visualized results of `mapping.ipynb` [here](https://nbviewer.org/github/How
 * Marked slopes according to EASA vertiport guidelines on the map by matplotlib.pyplot (Python).
     <figure>
     <img src="./figures/slope_python.png" alt=Unavailable slope(python)"/>
-    <figcaption><B>Figure 3.</B> Available(middle) Unavailable slopes(right) marked by matplotlib.pyplot(Python)</figcaption>
+    <figcaption><B>Figure 3.</B> Available(middle) and unavailable slopes(right) marked by matplotlib.pyplot(Python)</figcaption>
     </figure> 
 
 ### 5. Marked warehouses, new-TK airport, and places with high slopes by matplotlib.pyplot.
