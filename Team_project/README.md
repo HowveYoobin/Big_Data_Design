@@ -1,30 +1,34 @@
-# Team Project
-## Contriutors: PCH, CSK, PJC, and KYJ
-## Vertiport Placement in Gyeongsangbuk-do and Daegu for efficient middle-mile consignment of the fresh food
----
-mapping.ipynb -> https://nbviewer.org/github/HowveYoobin/Big_Data_Design/blob/main/Team_project/mapping.ipynb
+# Team Project (Contributors: PYB(Leader), PCH, CSK, PJC, and KYJ)
+## Goal: Vertiport Placement in Gyeongsangbuk-do and Daegu for efficient middle-mile consignment of fresh food
+See results of `mapping.ipynb` in [here](https://nbviewer.org/github/HowveYoobin/Big_Data_Design/blob/main/Team_project/mapping.ipynb)
 
-### Progress
-1. Background Research
-2. Scoped down project topic and collected data.
-3. Mapped prohibited-, restricted-, dangered- flight area on the map of Gyeongsangbuk-do and Daegu with Vworld API.
+## Progress of the project
+### 1. Background Research
+### 2. Scoped down the project topic and collected related data.
+### 3. Mapped prohibited-, restricted-, and dangered- flight areas on the map of Gyeongsangbuk-do(w.o. Ulleung-do) and Daegu with Vworld API.
     <figure>
-    <img src="./figures/no_ulleung_label.png" alt="no_ulleung"/>
-    <figcaption>Figure 3. No-flight zones in Daegu and Gyeongsangbuk-do(without Ulleung-do</figcaption>
+    <img src="./figures/no_ulleung_label.png" alt="No-flight zones"/>
+    <figcaption>**Figure 1.** No-flight zones in Daegu and Gyeongsangbuk-do(w.o. Ulleung-do</figcaption>
     </figure>
     
-4. Marked locations with slopes more than 26 degrees on the map with QGIS.
+### 4. Marked locations with high slopes according to EASA vertiport guidelines on the map with QGIS and python.
+* Marked unavailable slopes according to EASA vertiport guidelines on the map by QGIS.
     <figure>
-    <img src="./figures/slope.png" alt="slope by QGIS"/>
-    <figcaption>Figure 4. QGIS slopes(>26)</figcaption>
-    </figure>  
-    * QGIS -> python matplotlib
+    <img src="./figures/slope.png" alt="Unavailable slope(QGIS)"/>
+    <figcaption>**Figure 2.** Unavailable slopes marked by QGIS </figcaption>
+    </figure>
+* Marked slopes according to EASA vertiport guidelines on the map by matplotlib.pyplot (Python).
     <figure>
-    <img src="./figures/slope_python.png" alt="slope by python"/>
-    <figcaption>Figure 5. Python slopes (matplotlib)</figcaption>
+    <img src="./figures/slope_python.png" alt=Unavailable slope(python)"/>
+    <figcaption>**Figure 3.** Available(middle) Unavailable slopes(right) marked by matplotlib.pyplot(Python)</figcaption>
     </figure> 
 
-5. Marked 
+### 5. Marked warehouses in Daegu and Gyeongsangbuk-do, new-TK airport, and places with high slopes by matplotlib.pyplot.
+    <figure class="half">  
+    <a href="link"><img src="./figures/warehouse+airport.png" alt="warehouse+airport"></a>  
+    <a href="link"><img src="./figures/warehouse+airport+slope.png" alt="warehouse+airport+slope"></a>
+    <figcaption>**Figure 4.** Locations of the warehouses(blue point) and new TK airport(star) were marked on the left map. The places with unavailable slopes(gray point) were marked on the right map.</figcaption>
+    </figure>
 
 5. Finding out the relationship between warehouse size and the amount of delivery traffic in Hwaseong.
    * Reducing computational cost by using server
