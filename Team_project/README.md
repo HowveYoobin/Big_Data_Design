@@ -38,7 +38,7 @@ See visualized results of `mapping.ipynb` [here](https://nbviewer.org/github/How
   <figcaption align="center"><B>Figure 5.</B> Locations of the vertiport candidates(red X) were marked on the left map. The locations of the vertiport candidates(red X) and places with unavailable slopes(gray point) were marked on the right map. New TK airport was indicated as a black star.</figcaption>
 </p>
 
-* Detailed inspection of selected vertiport candidates by folium.
+* Detailed inspection for selected vertiport candidates by folium.
 <p align="center">
   <img src="./figures/Kmean3_folium.png" alt="Kmeans result(K=3) visualized by folium" align="center">
   <figcaption align="center"><B>Figure 6.</B>. Selected Vertiport candidates marked on folium map. Star(red) = vertiport candidates. Plane(blue) = TK new airport</figcaption>
