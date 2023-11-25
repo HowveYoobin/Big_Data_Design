@@ -8,7 +8,7 @@ See results of `mapping.ipynb` in [here](https://nbviewer.org/github/HowveYoobin
 ### 3. Mapped prohibited-, restricted-, and dangered- flight areas on the map of Gyeongsangbuk-do(w.o. Ulleung-do) and Daegu with Vworld API.
     
     <figure>
-    <img src="./figures/no_ulleung_label.png" alt="No-flight zones"/>
+    [No-flight zones]("./figures/no_ulleung_label.png")
     <figcaption>Figure 1. No-flight zones in Daegu and Gyeongsangbuk-do(w.o. Ulleung-do</figcaption>
     </figure>
     
