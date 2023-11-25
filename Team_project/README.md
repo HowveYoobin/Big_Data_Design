@@ -9,18 +9,18 @@ mapping.ipynb -> https://nbviewer.org/github/HowveYoobin/Big_Data_Design/blob/ma
 2. Scoped down project topic and collected data.
 3. Mapped prohibited-, restricted-, dangered- flight area on the map of Gyeongsangbuk-do and Daegu with Vworld API.
     <figure>
-    <img src="no_ulleung_label.png" alt="no_ulleung"/>
+    <img src="./figures/no_ulleung_label.png" alt="no_ulleung"/>
     <figcaption>Figure 3. No-flight zones in Daegu and Gyeongsangbuk-do(without Ulleung-do</figcaption>
     </figure>
     
 4. Marked locations with slopes more than 26 degrees on the map with QGIS.
     <figure>
-    <img src="slope.png" alt="slope by QGIS"/>
+    <img src="./figures/slope.png" alt="slope by QGIS"/>
     <figcaption>Figure 4. QGIS slopes(>26)</figcaption>
     </figure>  
     * QGIS -> python matplotlib
     <figure>
-    <img src="slope_python.png" alt="slope by python"/>
+    <img src="./figures/slope_python.png" alt="slope by python"/>
     <figcaption>Figure 5. Python slopes (matplotlib)</figcaption>
     </figure> 
 
