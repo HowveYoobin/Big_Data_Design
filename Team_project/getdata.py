@@ -9,7 +9,7 @@ import json
 import numpy as np
 import matplotlib.pyplot as plt
 import folium
-from folium.plugins import FloatImage
+from folium import Marker
 import pandas as pd
 import geopandas as gpd
 from shapely import wkt
@@ -17,11 +17,10 @@ from matplotlib import rc
 rc('font', family='AppleGothic')
 plt.rcParams['axes.unicode_minus'] = False
 from datetime import datetime
-
-
+from sklearn.cluster import KMeans
 
 class GetData:
-    def __init__(self, API_key, background):
+    def __init__(self, API_key, background, point_geojson, slope_gpkg):
         #### API 관련 변수 정의 ####
         self.key = API_key
         self.endpoint = "https://api.vworld.kr/req/data"
@@ -59,7 +58,19 @@ class GetData:
         df = pd.read_csv(str(background))
         df['geometry'] = df['geometry'].apply(wkt.loads)
         self.geo = gpd.GeoDataFrame(df, crs='epsg:4326')
+
+        #### 창고 점 찍기 위한 데이터셋 가져오기 ####
+        gdf = gpd.read_file(str(point_geojson))
+        points = gdf['geometry'].apply(lambda geom: (geom.x, geom.y))
+        self.warehouse_df = pd.DataFrame(points.tolist(), columns = ['lon', 'lat'])
         
+        #### 경사도 데이터 가져오기 ####
+        slope_file = gpd.read_file(str(slope_gpkg), driver = "gpkg")
+        slope_file = slope_file.to_crs("EPSG:4326")
+        high_slope = slope_file[slope_file["DN"] == 1]
+        high_slope_array = high_slope['geometry'].apply(lambda geom: (geom.exterior.xy[0][0], geom.exterior.xy[1][0]))
+        self.slope_df = pd.DataFrame(high_slope_array.tolist(), columns=['lon', 'lat'])
+
     # 지역별 [경도, 위도] 좌표 (plt용)
     def get_lon_lat(self, region):
             
@@ -119,7 +130,7 @@ class GetData:
         return lat_lon
     
     # Folium으로 시각화
-    def folium_visualize(self, *lat_lon_dicts):
+    def folium_visualize(self, vertiport_candidates, *lat_lon_dicts):
         
         center = [36.0194, 129.3434] # 경상북도 포항에서 시작
         line_colors = ["red", "blue", "green", "purple"]
@@ -144,6 +155,15 @@ class GetData:
                                 #tooltip = "Polyline",
                                 color = line_colors[i % len(line_colors)]
                                 ).add_to(m).add_child(folium.Popup(popup_content))
+        
+        # 버티포트 입지후보 표시하기
+        for _,row in vertiport_candidates.iterrows():
+            Marker(location = [row['lat'], row['lon']],
+                   icon = folium.Icon(color="red", icon = 'star')
+                   ).add_to(m)
+        
+        # 대구경북 신공항 표시하기
+        Marker(location = [36.3026462, 128.5236647], icon = folium.Icon(color="blue", icon = 'plane')).add_to(m)
 
         return m
     
@@ -164,15 +184,22 @@ class GetData:
         fig,ax = plt.subplots(figsize=(12,12))
 
         # 배경 지도(경북, 대구) 그리기
-        self.geo.boundary.plot(ax=ax, linewidth=1, colors = 'black')
+        self.geo.boundary.plot(ax=ax, linewidth=1, colors = 'gray')
         ax.set_title("경상북도 및 대구 지역 비행구역", fontsize=20)
         ax.set_xlim(127.5, 130)
         ax.set_ylim(35.5, 37.3)
 
+        # 경사도 그리기
+        ax.scatter(x = self.slope_df['lon'], y = self.slope_df['lat'], c="gray", marker='o', s=0.1, alpha=0.4)
+
+        # 창고 지점 그리기
+        ax.scatter(x= self.warehouse_df['lon'], y = self.warehouse_df['lat'], marker = "o", alpha=0.4)
+
+        # 대구경북신공항 추가
+        ax.scatter(x = 128.5236647,y = 36.3026462, marker = "*", color = "red", s = 300)
+
         colors = ["green", "red", "blue",  "purple"]
         i = -1
-        # legend_labels = []
-
         # 비행 구역 그리기
         for dict in lon_lat_dicts:
             i += 1
@@ -190,9 +217,66 @@ class GetData:
                     coord[1] = coord[1] - 0.03
                 ax.annotate(str(region), xy = (coord[0], coord[1]), color = "black")    
         
+        plt.xlabel('Longitude', fontsize = 18)
+        plt.ylabel('Latitude', fontsize = 18)
         plt.show()
         
         if save == True:
             fig.savefig(f"{datetime.today().year}{datetime.today().month}{datetime.today().day}{datetime.today().hour}{datetime.today().minute}_map.png")
 
-            
+    def Kmeans(self, k, *lon_lat_dicts, save = False):
+        fig,ax = plt.subplots(figsize=(12,12))
+
+        # 경사도 그리기
+        ax.scatter(x = self.slope_df['lon'], y = self.slope_df['lat'], c="gray", marker='o', s=0.1, alpha=0.4)
+        
+        # 배경 지도(경북, 대구) 그리기
+        self.geo.boundary.plot(ax=ax, linewidth=1, colors = 'grey')
+        ax.set_title("경상북도 및 대구 지역 비행구역", fontsize=20)
+        ax.set_xlim(127.5, 130)
+        ax.set_ylim(35.5, 37.3)
+        
+        # 대구경북신공항 추가
+        ax.scatter(x = 128.5236647, y = 36.3026462, marker = "*", color = "black", s = 300, label = "대구경북신공항 부지")
+
+        # 비행 구역 그리기
+        colors = ["green", "red", "blue",  "purple"]
+        i = -1
+        
+        for dict in lon_lat_dicts:
+            i += 1
+            coord_array = self.coord_array(dict)
+            for region in coord_array.keys():
+                # legend_labels.append(f"{colors[i]}: {region}")
+                ax.plot(coord_array[str(region)][0], coord_array[str(region)][1], c = colors[i])
+                # 주석 달기
+                coord = [round(np.mean(coord_array[str(region)][0]),2), round(np.mean(coord_array[str(region)][1]), 2)]
+                if "P" in  str(region) and "A" in str(region):
+                    coord[1] = coord[1] + 0.1
+                elif "P" in  str(region)  and "B" in str(region):
+                    coord[1] = coord[1] - 0.1
+                elif "155A" in  str(region):
+                    coord[1] = coord[1] - 0.03
+                ax.annotate(str(region), xy = (coord[0], coord[1]), color = "black")    
+        
+        # K Means 실행
+        warehouse = self.warehouse_df.copy()
+        km = KMeans(n_clusters = k, random_state = 42)
+        km.fit(warehouse)
+
+        warehouse['cluster'] = km.labels_
+        centroids_df = pd.DataFrame(km.cluster_centers_, columns = ['lon', 'lat'])
+        centroids_df['cluster'] = range(k)
+
+        plt.scatter(warehouse['lon'], warehouse['lat'], c=warehouse['cluster'], cmap='viridis', marker='o', alpha=0.4)
+        plt.scatter(centroids_df['lon'], centroids_df['lat'], c='red', marker='X', s=200, label='Vertiport candidate')
+        plt.title(f'K-Means Clustering with Centroids (k={k})', fontsize=20)
+        plt.xlabel('Longitude', fontsize=18)
+        plt.ylabel('Latitude', fontsize = 18)
+        plt.legend()
+        plt.show()
+        
+        if save == True:
+            fig.savefig(f"{datetime.today().year}{datetime.today().month}{datetime.today().day}{datetime.today().hour}{datetime.today().minute}_map.png")
+        
+        return warehouse, centroids_df
