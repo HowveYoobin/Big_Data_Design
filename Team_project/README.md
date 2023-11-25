@@ -1,6 +1,6 @@
 # Team Project (Contributors: PYB(Leader), PCH, CSK, PJC, and KYJ)
 ## Goal: Vertiport Placement in Gyeongsangbuk-do and Daegu for efficient middle-mile consignment of fresh food
-See visualized results of `mapping.ipynb` [here](https://nbviewer.org/github/HowveYoobin/Big_Data_Design/blob/main/Team_project/mapping.ipynb)
+See visualized results of `mapping.ipynb` [here](https://nbviewer.org/github/HowveYoobin/Big_Data_Design/blob/main/Team_project/mapping.ipynb)  
 [1.](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Team_project/README.md#completed) Completed  
    [1.1.](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Team_project/README.md#1-background-research) Background Research  
    [1.2.](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Team_project/README.md#2-scoped-down-the-project-topic-and-collected-related-data) Scoped down the project topic and collected related data  
