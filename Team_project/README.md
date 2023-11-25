@@ -1,13 +1,14 @@
 # Team Project (Contributors: PYB(Leader), PCH, CSK, PJC, and KYJ)
 ## Goal: Vertiport Placement in Gyeongsangbuk-do and Daegu for efficient middle-mile consignment of fresh food
 See visualized results of `mapping.ipynb` [here](https://nbviewer.org/github/HowveYoobin/Big_Data_Design/blob/main/Team_project/mapping.ipynb)
-1. [Completed]
-   1.1. [Background Research](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Team_project/README.md#1-background-research)
-   1.2. [Scoped down the project topic and collected related data](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Team_project/README.md#2-scoped-down-the-project-topic-and-collected-related-data)
-   1.3. [Mapped prohibited-, restricted-, and dangered- flight areas on the map of Gyeongsangbuk-do(w.o. Ulleung-do) and Daegu with Vworld API.](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Team_project/README.md#3-mapped-prohibited--restricted--and-dangered--flight-areas-on-the-map-of-gyeongsangbuk-dowo-ulleung-do-and-daegu-with-vworld-api)
-   1.4. [Marked locations with high slopes according to EASA vertiport guidelines on the map with QGIS and python.](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Team_project/README.md#4-marked-locations-with-high-slopes-according-to-easa-vertiport-guidelines-on-the-map-with-qgis-and-python)
-   1.5. [Marked warehouses, new-TK airport, and places with high slopes by matplotlib.pyplot.](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Team_project/README.md#5-marked-warehouses-new-tk-airport-and-places-with-high-slopes-by-matplotlibpyplot)
+1. [Completed](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Team_project/README.md#completed)
+   1.1. [Background Research](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Team_project/README.md#1-background-research)  
+   1.2. [Scoped down the project topic and collected related data](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Team_project/README.md#2-scoped-down-the-project-topic-and-collected-related-data)  
+   1.3. [Mapped prohibited-, restricted-, and dangered- flight areas on the map of Gyeongsangbuk-do(w.o. Ulleung-do) and Daegu with Vworld API.](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Team_project/README.md#3-mapped-prohibited--restricted--and-dangered--flight-areas-on-the-map-of-gyeongsangbuk-dowo-ulleung-do-and-daegu-with-vworld-api)  
+   1.4. [Marked locations with high slopes according to EASA vertiport guidelines on the map with QGIS and python.](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Team_project/README.md#4-marked-locations-with-high-slopes-according-to-easa-vertiport-guidelines-on-the-map-with-qgis-and-python)  
+   1.5. [Marked warehouses, new-TK airport, and places with high slopes by matplotlib.pyplot.](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Team_project/README.md#5-marked-warehouses-new-tk-airport-and-places-with-high-slopes-by-matplotlibpyplot)  
    1.6. [Selected vertiport candidates by using the K-Means algorithm. (K = 3)](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Team_project/README.md#6-selected-vertiport-candidates-by-using-the-k-means-algorithm-k--3)
+2. [We are working on...](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Team_project/README.md#we-are-working-on)  
 
 ## Completed
 ### 1. Background Research
