@@ -7,7 +7,7 @@ See visualized results of `mapping.ipynb` [here](https://nbviewer.org/github/How
    [1.3.](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Team_project/README.md#3-mapped-prohibited--restricted--and-dangered--flight-areas-on-the-map-of-gyeongsangbuk-dowo-ulleung-do-and-daegu-with-vworld-api) Mapped prohibited-, restricted-, and dangered- flight areas on the map of Gyeongsangbuk-do(w.o. Ulleung-do) and Daegu with Vworld API.  
    [1.4.](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Team_project/README.md#4-marked-locations-with-high-slopes-according-to-easa-vertiport-guidelines-on-the-map-with-qgis-and-python) Marked locations with high slopes according to EASA vertiport guidelines on the map with QGIS and python.  
    [1.5.](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Team_project/README.md#5-marked-warehouses-new-tk-airport-and-places-with-high-slopes-by-matplotlibpyplot) Marked warehouses, new-TK airport, and places with high slopes by matplotlib.pyplot.  
-   [1.6.](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Team_project/README.md#6-selected-vertiport-candidates-by-using-the-k-means-algorithm-k--3) Selected vertiport candidates by using the K-Means algorithm. (K = 3)
+   [1.6.](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Team_project/README.md#6-selected-vertiport-candidates-by-using-the-k-means-algorithm-k--3) Selected vertiport candidates by using the K-Means algorithm. (K = 3)  
 [2.](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Team_project/README.md#we-are-working-on) We are working on...  
 
 ## Completed
