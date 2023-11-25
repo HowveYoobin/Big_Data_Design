@@ -1,8 +1,8 @@
 # Team Project (Contributors: PYB(Leader), PCH, CSK, PJC, and KYJ)
 ## Goal: Vertiport Placement in Gyeongsangbuk-do and Daegu for efficient middle-mile consignment of fresh food
-See results of `mapping.ipynb` in [here](https://nbviewer.org/github/HowveYoobin/Big_Data_Design/blob/main/Team_project/mapping.ipynb)
+See visualized results of `mapping.ipynb` [here](https://nbviewer.org/github/HowveYoobin/Big_Data_Design/blob/main/Team_project/mapping.ipynb)
 
-## By Far...
+## Completed By Far
 ### 1. Background Research
 ### 2. Scoped down the project topic and collected related data.
 ### 3. Mapped prohibited-, restricted-, and dangered- flight areas on the map of Gyeongsangbuk-do(w.o. Ulleung-do) and Daegu with Vworld API.  
@@ -31,12 +31,26 @@ See results of `mapping.ipynb` in [here](https://nbviewer.org/github/HowveYoobin
 </p>
 
 ### 6. Selected vertiport candidates by using the K-Means algorithm. (K = 3)
-* K was determined by eye inspection
+* K was determined by eye inspection and we could see 3 clusters of warehouses.
 <p align="center">
   <img src="./figures/Kmeans_3.png" alt="Kmeans result(K=3)" align="center" width="49%">
   <img src="./figures/Kmeans3+slope.png" alt="Kmeans result(K=3) with slope" align="center" width="49%">
   <figcaption align="center"><B>Figure 5.</B> Locations of the vertiport candidates(red X) were marked on the left map. The locations of the vertiport candidates(red X) and places with unavailable slopes(gray point) were marked on the right map. New TK airport was indicated as a black star.</figcaption>
 </p>
+
+* Detailed inspection of selected vertiport candidates by folium.
+<p align="center">
+  <img src="./figures/Kmean3_folium.png" alt="Kmeans result(K=3) visualized by folium" align="center">
+  <figcaption align="center"><B>Figure 6.</B>. Selected Vertiport candidates marked on folium map. Star(red) = vertiport candidates. Plane(blue) = TK new airport</figcaption>
+</p>
+
+<p align="center">
+  <img src="./figures/centroid1.png" alt="Vertiport candidate 1" align="center" width="33%">
+  <img src="./figures/centroid2.png" alt="Vertiport candidate 2" align="center" width="33%">
+  <img src="./figures/centroid2.png" alt="Vertiport candidate 3" align="center" width="33%">
+  <figcaption align="center"><B>Figure 7.</B> Detailed locations of 3 vertiport candidates.</figcaption>
+</p>
+
 ---
 
 ## We are working on...
