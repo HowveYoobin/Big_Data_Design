@@ -34,29 +34,29 @@ See visualized results of `mapping.ipynb` [here](https://nbviewer.org/github/How
 
 ### 5. Marked warehouses, new-TK airport, and places with high slopes by matplotlib.pyplot.
 <p align="center">
-  <img src="./figures/warehouse+airport.png" alt="warehouse+airport" align="center" width="49%">
-  <img src="./figures/warehouse+airport+slope.png" alt="warehouse+airport+slope" align="center" width="49%">
+  <img src="./figures/refware_map.png" alt="warehouse+airport" align="center" width="49%">
+  <img src="./figures/refware_map_slope.png" alt="warehouse+airport+slope" align="center" width="49%">
   <figcaption align="center"><B>Figure 4.</B> Locations of the warehouses(blue point) and new TK airport(star) were marked on the left map. The places with unavailable slopes(gray point) were marked on the right map.</figcaption>
 </p>
 
 ### 6. Selected vertiport candidates by using the K-Means algorithm. (K = 3)
 * K was determined by eye inspection and we could see 3 clusters of warehouses.
 <p align="center">
-  <img src="./figures/Kmeans_3.png" alt="Kmeans result(K=3)" align="center" width="49%">
-  <img src="./figures/Kmeans3+slope.png" alt="Kmeans result(K=3) with slope" align="center" width="49%">
+  <img src="./figures/refware_Kmeans.png" alt="Kmeans result(K=3)" align="center" width="49%">
+  <img src="./figures/refware_slope_Kmeans3.png" alt="Kmeans result(K=3) with slope" align="center" width="49%">
   <figcaption align="center"><B>Figure 5.</B> Locations of the vertiport candidates(red X) were marked on the left map. The locations of the vertiport candidates(red X) and places with unavailable slopes(gray point) were marked on the right map. New TK airport was indicated as a black star.</figcaption>
 </p>
 
 * Detailed inspection for selected vertiport candidates by folium.
 <p align="center">
-  <img src="./figures/Kmean3_folium.png" alt="Kmeans result(K=3) visualized by folium" align="center">
+  <img src="./figures/ref_centroids.png" alt="Kmeans result(K=3) visualized by folium" align="center">
   <figcaption align="center"><B>Figure 6.</B> Selected Vertiport candidates marked on folium map. Star(red) = vertiport candidates. Plane(blue) = TK new airport</figcaption>
 </p>
 
 <p align="center">
-  <img src="./figures/centroid1.png" alt="Vertiport candidate 1" align="center" width="40%">
-  <img src="./figures/centroid2.png" alt="Vertiport candidate 2" align="center" width="40%">
-  <img src="./figures/centroid3.png" alt="Vertiport candidate 3" align="center" width="40%">
+  <img src="./figures/ref_centroid1.png" alt="Vertiport candidate 1" align="center" width="40%">
+  <img src="./figures/ref_centroid2.png" alt="Vertiport candidate 2" align="center" width="40%">
+  <img src="./figures/ref_centroid3.png" alt="Vertiport candidate 3" align="center" width="40%">
   <figcaption align="center"><B>Figure 7.</B> Detailed locations of 3 vertiport candidates.</figcaption>
 </p>
 

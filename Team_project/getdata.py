@@ -180,7 +180,7 @@ class GetData:
         return coord_array
          
     # plt로 나타내기
-    def plt_visualize(self, *lon_lat_dicts, save = False):
+    def plt_visualize(self, *lon_lat_dicts, slope = False, save = False):
         fig,ax = plt.subplots(figsize=(12,12))
 
         # 배경 지도(경북, 대구) 그리기
@@ -190,7 +190,8 @@ class GetData:
         ax.set_ylim(35.5, 37.3)
 
         # 경사도 그리기
-        ax.scatter(x = self.slope_df['lon'], y = self.slope_df['lat'], c="gray", marker='o', s=0.1, alpha=0.4)
+        if slope == True:
+            ax.scatter(x = self.slope_df['lon'], y = self.slope_df['lat'], c="gray", marker='o', s=0.1, alpha=0.4)
 
         # 창고 지점 그리기
         ax.scatter(x= self.warehouse_df['lon'], y = self.warehouse_df['lat'], marker = "o", alpha=0.4)
@@ -224,15 +225,16 @@ class GetData:
         if save == True:
             fig.savefig(f"{datetime.today().year}{datetime.today().month}{datetime.today().day}{datetime.today().hour}{datetime.today().minute}_map.png")
 
-    def Kmeans(self, k, *lon_lat_dicts, save = False):
+    def Kmeans(self, k, *lon_lat_dicts, slope = False, save = False):
         fig,ax = plt.subplots(figsize=(12,12))
 
         # 경사도 그리기
-        ax.scatter(x = self.slope_df['lon'], y = self.slope_df['lat'], c="gray", marker='o', s=0.1, alpha=0.4)
+        if slope == True:
+            ax.scatter(x = self.slope_df['lon'], y = self.slope_df['lat'], c="gray", marker='o', s=0.1, alpha=0.4)
         
         # 배경 지도(경북, 대구) 그리기
         self.geo.boundary.plot(ax=ax, linewidth=1, colors = 'grey')
-        ax.set_title("경상북도 및 대구 지역 비행구역", fontsize=20)
+        ax.set_title("경상북도 및 대구 지역의 비행 제한/금지/위험 구역 및 냉동냉장 창고", fontsize=20)
         ax.set_xlim(127.5, 130)
         ax.set_ylim(35.5, 37.3)
         
@@ -277,6 +279,6 @@ class GetData:
         plt.show()
         
         if save == True:
-            fig.savefig(f"{datetime.today().year}{datetime.today().month}{datetime.today().day}{datetime.today().hour}{datetime.today().minute}_map.png")
+            fig.savefig(f"{datetime.today().year}{datetime.today().month}{datetime.today().day}{datetime.today().hour}{datetime.today().minute}_Kmeans.png")
         
         return warehouse, centroids_df
