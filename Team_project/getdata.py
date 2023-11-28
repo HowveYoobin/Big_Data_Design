@@ -10,6 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import folium
 from folium import Marker
+from folium import Circle
 import pandas as pd
 import geopandas as gpd
 from shapely import wkt
@@ -130,7 +131,7 @@ class GetData:
         return lat_lon
     
     # Folium으로 시각화
-    def folium_visualize(self, vertiport_candidates, *lat_lon_dicts):
+    def folium_visualize(self,rad, vertiport_candidates, *lat_lon_dicts):
         
         center = [36.0194, 129.3434] # 경상북도 포항에서 시작
         line_colors = ["red", "blue", "green", "purple"]
@@ -161,9 +162,10 @@ class GetData:
             Marker(location = [row['lat'], row['lon']],
                    icon = folium.Icon(color="red", icon = 'star')
                    ).add_to(m)
+            Circle(location = [row['lat'], row['lon']], popup = row['cluster'], radius = rad, color = "red", fill = "red", fill_opacity = 0.2).add_to(m)
         
         # 대구경북 신공항 표시하기
-        Marker(location = [36.3026462, 128.5236647], icon = folium.Icon(color="blue", icon = 'plane')).add_to(m)
+        Marker(location = [36.3026462, 128.5236647], icon = folium.Icon(color="blue", icon = 'plane'), popup = "대구경북신공항 부지").add_to(m)
 
         return m
     
