@@ -1,17 +1,18 @@
-## Download packages
+####################### Download packages #############################
 # ! pip install requests
 # ! pip install jsonlines
 # pip install geopandas
 
-# Import Packages
-## API calling
+######################## Import Packages #############################
+# API request
 import requests
 import json
 
-# array, dataframe and visualization
+# Calculation
 import numpy as np
 from scipy.spatial.distance import cdist
 
+# Visualization
 import matplotlib.pyplot as plt
 import folium
 from folium import Marker
@@ -25,12 +26,16 @@ rc('font', family='AppleGothic')
 plt.rcParams['axes.unicode_minus'] = False
 from datetime import datetime
 
-# clustering
+# KMeans clustering & Optimization
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_samples, silhouette_score
+from sklearn.metrics import pairwise_distances
 
 class GetData:
+    ###################################################### Load Data ##########################################################
+
     def __init__(self, API_key, background, point_geojson, slope_gpkg):
+        
         #### API 관련 변수 정의 ####
         self.key = API_key
         self.endpoint = "https://api.vworld.kr/req/data"
@@ -81,7 +86,7 @@ class GetData:
         high_slope_array = high_slope['geometry'].apply(lambda geom: (geom.exterior.xy[0][0], geom.exterior.xy[1][0]))
         self.slope_df = pd.DataFrame(high_slope_array.tolist(), columns=['lon', 'lat'])
 
-    # 지역별 [경도, 위도] 좌표 (plt용)
+    ###################################################### 지역별 [경도, 위도] 좌표 (plt용) ########################################################### 
     def get_lon_lat(self, region):
             
             if region not in self.regions.keys():
@@ -124,7 +129,8 @@ class GetData:
                 return lon_lat
                 # return res
 
-    # 지역별 [위도, 경도] 좌표 (Folium용)
+    ###################################################### 지역별 [위도, 경도] 좌표 (Folium용) ########################################################### 
+    
     def get_lat_lon(self, region):
         
         lat_lon = dict()
@@ -139,7 +145,8 @@ class GetData:
         
         return lat_lon
     
-    # Folium으로 시각화
+    ###################################################### Folium 지도시각화 ##########################################################
+    
     def folium_visualize(self,rad, vertiport_candidates, *lat_lon_dicts):
         
         center = [36.0194, 129.3434] # 경상북도 포항에서 시작
@@ -190,7 +197,8 @@ class GetData:
         
         return coord_array
          
-    # plt로 나타내기
+    ###################################################### Matplotlib 지도시각화 ##########################################################
+    
     def plt_visualize(self, *lon_lat_dicts, slope = False, save = False):
         fig,ax = plt.subplots(figsize=(12,12))
 
@@ -238,6 +246,8 @@ class GetData:
         if save == True:
             fig.savefig(f"{datetime.today().year}{datetime.today().month}{datetime.today().day}{datetime.today().hour}{datetime.today().minute}_map.png")
 
+    ###################################################### KMeans 실행 & 지도시각화 #########################################################
+
     def Kmeans(self, k, *lon_lat_dicts, slope = False, save = False, adjust = False):
         fig,ax = plt.subplots(figsize=(12,12))
 
@@ -283,9 +293,26 @@ class GetData:
         centroids_df = pd.DataFrame(km.cluster_centers_, columns = ['lon', 'lat'])
         centroids_df['cluster'] = range(k)
 
-        #if adjust ==  True:
-        #    np.argmin(cdist(warehouse[['lon', 'lat']], centroids_df[['lon', 'lat']]), axis=1)
-            
+        if adjust ==  True:
+            # 각 cluster의 창고에서 centroid까지의 거리 계산
+            closest_points_list = []
+
+            for k in range(len(centroids_df)):
+                # 각 cluster number에서 창고 좌표들과 centroid 좌표 추출
+                warehouse_cluster = warehouse[warehouse['cluster'] == k][['lon', 'lat']]
+                centroid = centroids_df[centroids_df['cluster'] == k][['lon', 'lat']].values
+
+                # centroid와 해당 cluster의 각 창고 간의 지점 거리 계산 & 거리가 최솟값인 창고의 좌표 찾기
+                distances = cdist(warehouse_cluster, centroid, metric='euclidean')
+                closest_index = distances.argmin()
+                closest_warehouse = warehouse_cluster.iloc[closest_index]
+                closest_warehouse['cluster'] = k
+
+                closest_points_list.append(closest_warehouse.to_dict())
+
+            # 새로운 centroid_df 생성
+            centroids_df = pd.DataFrame(closest_points_list)
+            # warehouse.drop(labels = "distance", axis = 1, inplace=True)
 
         plt.scatter(warehouse['lon'], warehouse['lat'], c=warehouse['cluster'], cmap='viridis', marker='o', alpha=0.4)
         plt.scatter(centroids_df['lon'], centroids_df['lat'], c='red', marker='X', s=200, label='Vertiport candidate')
@@ -296,10 +323,15 @@ class GetData:
         plt.show()
         
         if save == True:
-            fig.savefig(f"{datetime.today().year}{datetime.today().month}{datetime.today().day}{datetime.today().hour}{datetime.today().minute}_Kmeans{k}.png")
+            if adjust == True:
+                fig.savefig(f"{datetime.today().year}{datetime.today().month}{datetime.today().day}{datetime.today().hour}{datetime.today().minute}_Kmeans{k}_adjusted.png")
+            else:
+                fig.savefig(f"{datetime.today().year}{datetime.today().month}{datetime.today().day}{datetime.today().hour}{datetime.today().minute}_Kmeans{k}.png")
         
         return warehouse, centroids_df
     
+     ###################################################### Silhouette Method ##########################################################
+
     # Silhouette method to find optimal K value
     def silhouette(self, max_k, save = False):
         # 1 ~ max_k까지의 수
@@ -350,6 +382,8 @@ class GetData:
         
         return sil_values, sil_avg
     
+     ###################################################### Elbow Method ##########################################################
+
     def elbow(self, max_k, save = False):
         inertia = []
         warehouse = self.warehouse_df.copy()
