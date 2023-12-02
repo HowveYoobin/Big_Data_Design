@@ -4,9 +4,14 @@
 # pip install geopandas
 
 # Import Packages
+## API calling
 import requests
 import json
+
+# array, dataframe and visualization
 import numpy as np
+from scipy.spatial.distance import cdist
+
 import matplotlib.pyplot as plt
 import folium
 from folium import Marker
@@ -14,11 +19,15 @@ from folium import Circle
 import pandas as pd
 import geopandas as gpd
 from shapely import wkt
+import matplotlib.cm as cm
 from matplotlib import rc
 rc('font', family='AppleGothic')
 plt.rcParams['axes.unicode_minus'] = False
 from datetime import datetime
+
+# clustering
 from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_samples, silhouette_score
 
 class GetData:
     def __init__(self, API_key, background, point_geojson, slope_gpkg):
@@ -203,6 +212,7 @@ class GetData:
 
         colors = ["green", "red", "blue",  "purple"]
         i = -1
+
         # 비행 구역 그리기
         for dict in lon_lat_dicts:
             i += 1
@@ -219,7 +229,8 @@ class GetData:
                 elif "155A" in  str(region):
                     coord[1] = coord[1] - 0.03
                 ax.annotate(str(region), xy = (coord[0], coord[1]), color = "black")    
-        
+
+
         plt.xlabel('Longitude', fontsize = 18)
         plt.ylabel('Latitude', fontsize = 18)
         plt.show()
@@ -227,7 +238,7 @@ class GetData:
         if save == True:
             fig.savefig(f"{datetime.today().year}{datetime.today().month}{datetime.today().day}{datetime.today().hour}{datetime.today().minute}_map.png")
 
-    def Kmeans(self, k, *lon_lat_dicts, slope = False, save = False):
+    def Kmeans(self, k, *lon_lat_dicts, slope = False, save = False, adjust = False):
         fig,ax = plt.subplots(figsize=(12,12))
 
         # 경사도 그리기
@@ -272,6 +283,10 @@ class GetData:
         centroids_df = pd.DataFrame(km.cluster_centers_, columns = ['lon', 'lat'])
         centroids_df['cluster'] = range(k)
 
+        #if adjust ==  True:
+        #    np.argmin(cdist(warehouse[['lon', 'lat']], centroids_df[['lon', 'lat']]), axis=1)
+            
+
         plt.scatter(warehouse['lon'], warehouse['lat'], c=warehouse['cluster'], cmap='viridis', marker='o', alpha=0.4)
         plt.scatter(centroids_df['lon'], centroids_df['lat'], c='red', marker='X', s=200, label='Vertiport candidate')
         plt.title(f'K-Means Clustering with Centroids (k={k})', fontsize=20)
@@ -281,6 +296,74 @@ class GetData:
         plt.show()
         
         if save == True:
-            fig.savefig(f"{datetime.today().year}{datetime.today().month}{datetime.today().day}{datetime.today().hour}{datetime.today().minute}_Kmeans.png")
+            fig.savefig(f"{datetime.today().year}{datetime.today().month}{datetime.today().day}{datetime.today().hour}{datetime.today().minute}_Kmeans{k}.png")
         
         return warehouse, centroids_df
+    
+    # Silhouette method to find optimal K value
+    def silhouette(self, max_k, save = False):
+        # 1 ~ max_k까지의 수
+        k = [i for i in range(2, max_k + 1)]
+        warehouse = self.warehouse_df.copy()
+
+        # plt.subplots()으로 리스트에 기재된 클러스터링 수만큼의 sub figures를 가지는 axs 생성 
+        fig, ax = plt.subplots(figsize=(4*(max_k-1), 4), nrows=1, ncols=max_k-1)
+        
+        # 리스트에 기재된 클러스터링 갯수들을 차례로 iteration 수행하면서 실루엣 개수 시각화
+        for ind, n_cluster in enumerate(k):
+            
+            # KMeans 클러스터링 수행하고, 실루엣 스코어와 개별 데이터의 실루엣 값 계산. 
+            clusterer = KMeans(n_clusters = n_cluster, random_state=42)
+            cluster_labels = clusterer.fit_predict(warehouse)
+            
+            sil_avg = silhouette_score(warehouse, cluster_labels)
+            sil_values = silhouette_samples(warehouse, cluster_labels)
+            
+            y_lower = 10
+            ax[ind].set_title('Number of Cluster : '+ str(n_cluster)+'\n' \
+                            'Silhouette Score :' + str(round(sil_avg,3)) )
+            ax[ind].set_xlabel("The silhouette coefficient values")
+            ax[ind].set_ylabel("Cluster label")
+            ax[ind].set_xlim([-0.1, 1])
+            ax[ind].set_ylim([0, len(warehouse) + (n_cluster + 1) * 10])
+            ax[ind].set_yticks([])  # Clear the yaxis labels / ticks
+            ax[ind].set_xticks([0, 0.2, 0.4, 0.6, 0.8, 1])
+            
+            # 클러스터링 갯수별로 fill_betweenx( )형태의 막대 그래프 표현. 
+            for i in range(n_cluster):
+                ith_cluster_sil_values = sil_values[cluster_labels==i]
+                ith_cluster_sil_values.sort()
+                
+                size_cluster_i = ith_cluster_sil_values.shape[0]
+                y_upper = y_lower + size_cluster_i
+                
+                color = cm.nipy_spectral(float(i) / n_cluster)
+                ax[ind].fill_betweenx(np.arange(y_lower, y_upper), 0, ith_cluster_sil_values, \
+                                    facecolor=color, edgecolor=color, alpha=0.7)
+                ax[ind].text(-0.05, y_lower + 0.5 * size_cluster_i, str(i))
+                y_lower = y_upper + 10
+                
+            ax[ind].axvline(x=sil_avg, color="red", linestyle="--")
+        
+        if save == True:
+            fig.savefig(f"silhouette_{max_k}.png")
+        
+        return sil_values, sil_avg
+    
+    def elbow(self, max_k, save = False):
+        inertia = []
+        warehouse = self.warehouse_df.copy()
+        for num_clusters in range(1, max_k+1):
+            kmeans = KMeans(n_clusters  = num_clusters, random_state=42)
+            kmeans.fit(warehouse)
+            inertia.append(kmeans.inertia_)
+        
+        plt.plot(range(1, max_k+1), inertia, "bo-")
+        plt.xlabel("Values of K")
+        plt.ylabel("Sum of squared distances (Inertia)")
+        plt.xticks(np.arange(1, max_k + 1))
+        plt.title("Elbow Method for optimal K")
+        plt.show()
+
+        if save == True:
+            plt.savefig(f"elbow_{max_k}.png")
