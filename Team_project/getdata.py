@@ -1,7 +1,7 @@
 ####################### Download packages #############################
 # ! pip install requests
 # ! pip install jsonlines
-# pip install geopandas
+# ! pip install geopandas
 
 ######################## Import Packages #############################
 # API request
@@ -14,6 +14,7 @@ from scipy.spatial.distance import cdist
 
 # Visualization
 import matplotlib.pyplot as plt
+import seaborn as sns
 import folium
 from folium import Marker
 from folium import Circle
@@ -29,7 +30,6 @@ from datetime import datetime
 # KMeans clustering & Optimization
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_samples, silhouette_score
-from sklearn.metrics import pairwise_distances
 
 class GetData:
     ###################################################### Load Data ##########################################################
@@ -165,10 +165,10 @@ class GetData:
                        ).add_to(m)
 
         # 인자로 받은 제한구역들 그리기
-        for i, dict in enumerate(lat_lon_dicts):
-            for region in dict.keys():
+        for i, dict_ in enumerate(lat_lon_dicts):
+            for region in dict_.keys():
                 popup_content = region
-                folium.PolyLine(locations = dict[str(region)], 
+                folium.PolyLine(locations = dict_[str(region)], 
                                 #tooltip = "Polyline",
                                 color = line_colors[i % len(line_colors)]
                                 ).add_to(m).add_child(folium.Popup(popup_content))
@@ -200,34 +200,36 @@ class GetData:
     ###################################################### Matplotlib 지도시각화 ##########################################################
     
     def plt_visualize(self, *lon_lat_dicts, slope = False, save = False):
-        fig,ax = plt.subplots(figsize=(12,12))
 
-        # 배경 지도(경북, 대구) 그리기
-        self.geo.boundary.plot(ax=ax, linewidth=1, colors = 'gray')
-        ax.set_title("경상북도 및 대구 지역 비행구역", fontsize=20)
+        sns.set(style="whitegrid")
+        fig, ax = plt.subplots(figsize=(12,12))
         ax.set_xlim(127.5, 130)
         ax.set_ylim(35.5, 37.3)
+        
+        # 배경 지도(경북, 대구) 그리기
+        self.geo.boundary.plot(ax=ax, linewidth=1, colors = 'gray')
 
         # 경사도 그리기
         if slope == True:
             ax.scatter(x = self.slope_df['lon'], y = self.slope_df['lat'], c="gray", marker='o', s=0.1, alpha=0.4)
 
         # 창고 지점 그리기
-        ax.scatter(x= self.warehouse_df['lon'], y = self.warehouse_df['lat'], marker = "o", alpha=0.4)
+        ax.scatter(x= self.warehouse_df['lon'], y = self.warehouse_df['lat'], marker = "o", alpha=0.4, label = 'Refrigerated Warehouse')
 
-        # 대구경북신공항 추가
-        ax.scatter(x = 128.5236647,y = 36.3026462, marker = "*", color = "red", s = 300)
+        # 대구경북신공항 그리기
+        ax.scatter(x = 128.5236647,y = 36.3026462, marker = "*", color = "red", s = 300, label = "TK Airport")
 
         colors = ["green", "red", "blue",  "purple"]
+        labels = {"green":"Flight Danger Area", "red":"Flight Prohibited Area", "blue":"Flight Restricted Area"}
         i = -1
 
         # 비행 구역 그리기
-        for dict in lon_lat_dicts:
+        for dict_ in lon_lat_dicts:
             i += 1
-            coord_array = self.coord_array(dict)
+            coord_array = self.coord_array(dict_)
             for region in coord_array.keys():
                 # legend_labels.append(f"{colors[i]}: {region}")
-                ax.plot(coord_array[str(region)][0], coord_array[str(region)][1], c = colors[i])
+                ax.plot(coord_array[str(region)][0], coord_array[str(region)][1], c = colors[i], label = labels[colors[i]])
                 # 주석 달기
                 coord = [round(np.mean(coord_array[str(region)][0]),2), round(np.mean(coord_array[str(region)][1]), 2)]
                 if "P" in  str(region) and "A" in str(region):
@@ -238,9 +240,14 @@ class GetData:
                     coord[1] = coord[1] - 0.03
                 ax.annotate(str(region), xy = (coord[0], coord[1]), color = "black")    
 
-
+        
+        plt.title("Refrigerated Warehouse in Daegu and Gyeongsangbuk-do", fontsize = 20)
         plt.xlabel('Longitude', fontsize = 18)
         plt.ylabel('Latitude', fontsize = 18)
+        plt.grid(linestyle='--')
+        handles, labels = plt.gca().get_legend_handles_labels()
+        by_label = dict(zip(labels, handles))
+        plt.legend(by_label.values(), by_label.keys(), loc = 'upper left')
         plt.show()
         
         if save == True:
@@ -249,31 +256,34 @@ class GetData:
     ###################################################### KMeans 실행 & 지도시각화 #########################################################
 
     def Kmeans(self, k, *lon_lat_dicts, slope = False, save = False, adjust = False):
+        
+        sns.set(style="whitegrid")
         fig,ax = plt.subplots(figsize=(12,12))
+        ax.set_xlim(127.5, 130)
+        ax.set_ylim(35.5, 37.3)
+        title = f"Vertiport candidates in Daegu and Gyeongsangbuk-do (n={k})"
 
         # 경사도 그리기
         if slope == True:
             ax.scatter(x = self.slope_df['lon'], y = self.slope_df['lat'], c="gray", marker='o', s=0.1, alpha=0.4)
-        
+
         # 배경 지도(경북, 대구) 그리기
-        self.geo.boundary.plot(ax=ax, linewidth=1, colors = 'grey')
-        ax.set_title("경상북도 및 대구 지역의 비행 제한/금지/위험 구역 및 냉동냉장 창고", fontsize=20)
-        ax.set_xlim(127.5, 130)
-        ax.set_ylim(35.5, 37.3)
+        self.geo.boundary.plot(ax=ax, linewidth=1, colors = 'gray')
         
         # 대구경북신공항 추가
-        ax.scatter(x = 128.5236647, y = 36.3026462, marker = "*", color = "black", s = 300, label = "대구경북신공항 부지")
+        ax.scatter(x = 128.5236647, y = 36.3026462, marker = "*", color = "black", s = 300, label = "TK Airport")
 
         # 비행 구역 그리기
         colors = ["green", "red", "blue",  "purple"]
+        labels = {"green": 'Flight Danger Area', "red":'Flight Prohibited Area', "blue":'Flight Restricted Area'}
         i = -1
         
-        for dict in lon_lat_dicts:
+        for dict_ in lon_lat_dicts:
             i += 1
-            coord_array = self.coord_array(dict)
+            coord_array = self.coord_array(dict_)
             for region in coord_array.keys():
                 # legend_labels.append(f"{colors[i]}: {region}")
-                ax.plot(coord_array[str(region)][0], coord_array[str(region)][1], c = colors[i])
+                ax.plot(coord_array[str(region)][0], coord_array[str(region)][1], c = colors[i], label = labels[colors[i]])
                 # 주석 달기
                 coord = [round(np.mean(coord_array[str(region)][0]),2), round(np.mean(coord_array[str(region)][1]), 2)]
                 if "P" in  str(region) and "A" in str(region):
@@ -290,9 +300,11 @@ class GetData:
         km.fit(warehouse)
 
         warehouse['cluster'] = km.labels_
+        
         centroids_df = pd.DataFrame(km.cluster_centers_, columns = ['lon', 'lat'])
         centroids_df['cluster'] = range(k)
 
+        # Vertiport candidate 위치를 centroid에 가장 가까운 창고 좌표로 조정
         if adjust ==  True:
             # 각 cluster의 창고에서 centroid까지의 거리 계산
             closest_points_list = []
@@ -313,13 +325,18 @@ class GetData:
             # 새로운 centroid_df 생성
             centroids_df = pd.DataFrame(closest_points_list)
             # warehouse.drop(labels = "distance", axis = 1, inplace=True)
-
-        plt.scatter(warehouse['lon'], warehouse['lat'], c=warehouse['cluster'], cmap='viridis', marker='o', alpha=0.4)
+            title += "(Adjusted)"
+        
+        warehouse['cluster'] = warehouse['cluster'].apply(lambda x: 'Cluster '+ str(x+1))
+        sns.scatterplot(x = 'lon', y = 'lat', data = warehouse, hue = 'cluster', palette=['darkorange', 'mediumseagreen', 'cornflowerblue'], marker='o', alpha=0.4)
+        # plt.scatter(warehouse['lon'], warehouse['lat'], c=warehouse['cluster'], cmap='viridis', marker='o', alpha=0.4)
         plt.scatter(centroids_df['lon'], centroids_df['lat'], c='red', marker='X', s=200, label='Vertiport candidate')
-        plt.title(f'K-Means Clustering with Centroids (k={k})', fontsize=20)
+        plt.title(title, fontsize=20)
         plt.xlabel('Longitude', fontsize=18)
         plt.ylabel('Latitude', fontsize = 18)
-        plt.legend()
+        handles, labels = plt.gca().get_legend_handles_labels()
+        by_label = dict(zip(labels, handles))
+        plt.legend(by_label.values(), by_label.keys(), loc = 'upper left')
         plt.show()
         
         if save == True:
