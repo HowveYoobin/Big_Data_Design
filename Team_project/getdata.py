@@ -176,9 +176,10 @@ class GetData:
         # 버티포트 입지후보 표시하기
         for _,row in vertiport_candidates.iterrows():
             Marker(location = [row['lat'], row['lon']],
-                   icon = folium.Icon(color="red", icon = 'star')
+                   icon = folium.Icon(color="red", icon = 'star'),
+                   popup = "Centroid" + str(row['cluster'] + 1)
                    ).add_to(m)
-            Circle(location = [row['lat'], row['lon']], popup = row['cluster'], radius = rad, color = "red", fill = "red", fill_opacity = 0.2).add_to(m)
+            # Circle(location = [row['lat'], row['lon']], popup = row['cluster'], radius = rad, color = "red", fill = "red", fill_opacity = 0.2).add_to(m)
         
         # 대구경북 신공항 표시하기
         Marker(location = [36.3026462, 128.5236647], icon = folium.Icon(color="blue", icon = 'plane'), popup = "대구경북신공항 부지").add_to(m)
@@ -211,7 +212,7 @@ class GetData:
 
         # 경사도 그리기
         if slope == True:
-            ax.scatter(x = self.slope_df['lon'], y = self.slope_df['lat'], c="gray", marker='o', s=0.1, alpha=0.4)
+            ax.scatter(x = self.slope_df['lon'], y = self.slope_df['lat'], c="linen", marker='o', s=0.1, alpha=0.4)
 
         # 창고 지점 그리기
         ax.scatter(x= self.warehouse_df['lon'], y = self.warehouse_df['lat'], marker = "o", alpha=0.4, label = 'Refrigerated Warehouse')
@@ -265,7 +266,7 @@ class GetData:
 
         # 경사도 그리기
         if slope == True:
-            ax.scatter(x = self.slope_df['lon'], y = self.slope_df['lat'], c="gray", marker='o', s=0.1, alpha=0.4)
+            ax.scatter(x = self.slope_df['lon'], y = self.slope_df['lat'], c="linen", marker='o', s=0.1, alpha=0.4)
 
         # 배경 지도(경북, 대구) 그리기
         self.geo.boundary.plot(ax=ax, linewidth=1, colors = 'gray')
