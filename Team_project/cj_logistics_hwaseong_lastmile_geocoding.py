@@ -1,3 +1,7 @@
+# hgu attach --> container 들어가기
+# conda activate env이름 -> 가상환경 들어가기
+# pip install 라이브러리 이름 -> 없는 라이브러리 다운로드
+
 import argparse
 import pandas as pd
 import numpy as np
@@ -7,10 +11,6 @@ import geopy
 import json
 import requests
 
-# args
-# client_id:
-# client_secret:
-# address:
 
 if __name__=='__main__':
         parser = argparse.ArgumentParser()
