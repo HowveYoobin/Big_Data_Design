@@ -21,6 +21,7 @@ from folium import Circle
 import pandas as pd
 import geopandas as gpd
 from shapely import wkt
+from shapely.geometry import Point, Polygon
 import matplotlib.cm as cm
 from matplotlib import rc
 rc('font', family='AppleGothic')
@@ -82,7 +83,7 @@ class GetData:
         #### 경사도 데이터 가져오기 ####
         slope_file = gpd.read_file(str(slope_gpkg), driver = "gpkg")
         slope_file = slope_file.to_crs("EPSG:4326")
-        high_slope = slope_file[slope_file["DN"] == 1]
+        high_slope = slope_file[slope_file["DN"] == 1] # 허용 가능한 경사도만 가져오기
         high_slope_array = high_slope['geometry'].apply(lambda geom: (geom.exterior.xy[0][0], geom.exterior.xy[1][0]))
         self.slope_df = pd.DataFrame(high_slope_array.tolist(), columns=['lon', 'lat'])
 
@@ -147,7 +148,7 @@ class GetData:
     
     ###################################################### Folium 지도시각화 ##########################################################
     
-    def folium_visualize(self,rad, vertiport_candidates, *lat_lon_dicts):
+    def folium_visualize(self, vertiport_candidates, *lat_lon_dicts, warehouse = False):
         
         center = [36.0194, 129.3434] # 경상북도 포항에서 시작
         line_colors = ["red", "blue", "green", "purple"]
@@ -163,6 +164,15 @@ class GetData:
                        name="경상북도 및 대구 (시군구)",
                        style_function = lambda x:map
                        ).add_to(m)
+        
+        # If warehouse == True, Mark warehouse
+        if warehouse == True:
+            # 창고 지점 그리기
+            for _,row in self.warehouse_df.iterrows():
+                Marker(location = [row['lat'], row['lon']],
+                   # icon = folium.Icon(color="red", icon = 'star'),
+                   popup = f"{row['lon'], row['lat']}",
+                   ).add_to(m)
 
         # 인자로 받은 제한구역들 그리기
         for i, dict_ in enumerate(lat_lon_dicts):
@@ -275,7 +285,9 @@ class GetData:
         ax.scatter(x = 128.5236647, y = 36.3026462, marker = "*", color = "black", s = 300, label = "TK Airport")
 
         # 비행 구역 그리기
+        order = ["Cluster "+str(i+1) for i in range(k)]
         colors = ["green", "red", "blue",  "purple"]
+        point_colors = sns.color_palette("husl", n_colors=k)
         labels = {"green": 'Flight Danger Area', "red":'Flight Prohibited Area', "blue":'Flight Restricted Area'}
         i = -1
         
@@ -305,33 +317,14 @@ class GetData:
         centroids_df = pd.DataFrame(km.cluster_centers_, columns = ['lon', 'lat'])
         centroids_df['cluster'] = range(k)
 
-        # Vertiport candidate 위치를 centroid에 가장 가까운 창고 좌표로 조정
-        if adjust ==  True:
-            # 각 cluster의 창고에서 centroid까지의 거리 계산
-            closest_points_list = []
-
-            for k in range(len(centroids_df)):
-                # 각 cluster number에서 창고 좌표들과 centroid 좌표 추출
-                warehouse_cluster = warehouse[warehouse['cluster'] == k][['lon', 'lat']]
-                centroid = centroids_df[centroids_df['cluster'] == k][['lon', 'lat']].values
-
-                # centroid와 해당 cluster의 각 창고 간의 지점 거리 계산 & 거리가 최솟값인 창고의 좌표 찾기
-                distances = cdist(warehouse_cluster, centroid, metric='euclidean')
-                closest_index = distances.argmin()
-                closest_warehouse = warehouse_cluster.iloc[closest_index]
-                closest_warehouse['cluster'] = k
-
-                closest_points_list.append(closest_warehouse.to_dict())
-
-            # 새로운 centroid_df 생성
-            centroids_df = pd.DataFrame(closest_points_list)
-            # warehouse.drop(labels = "distance", axis = 1, inplace=True)
+        if adjust == True:
             title += "(Adjusted)"
+            centroids_df = self.adjust_centroids(centroids_df, warehouse, self.slope_df, *lon_lat_dicts)
         
         warehouse['cluster'] = warehouse['cluster'].apply(lambda x: 'Cluster '+ str(x+1))
-        sns.scatterplot(x = 'lon', y = 'lat', data = warehouse, hue = 'cluster', palette=['darkorange', 'mediumseagreen', 'cornflowerblue'], marker='o', alpha=0.4)
+        sns.scatterplot(x = 'lon', y = 'lat', data = warehouse, hue = 'cluster', hue_order = order, palette=point_colors, marker='o', alpha=0.4)
         # plt.scatter(warehouse['lon'], warehouse['lat'], c=warehouse['cluster'], cmap='viridis', marker='o', alpha=0.4)
-        plt.scatter(centroids_df['lon'], centroids_df['lat'], c='red', marker='X', s=200, label='Vertiport candidate')
+        sns.scatterplot(x = centroids_df['lon'], y = centroids_df['lat'], c='red', marker='X', s=200, label='Vertiport candidate')
         plt.title(title, fontsize=20)
         plt.xlabel('Longitude', fontsize=18)
         plt.ylabel('Latitude', fontsize = 18)
@@ -348,59 +341,177 @@ class GetData:
         
         return warehouse, centroids_df
     
-     ###################################################### Silhouette Method ##########################################################
+    ###################################################### Adjust the location of vertiport candidates ##########################################################
+    
+    ########## Check slopes ##########
+    def slope_check(self, point, slope):
+        matching = pd.merge(point, slope, on = ["lon", "lat"], how = 'inner')
 
+        if not matching.empty: # 창고 위치의 경사도가 허용가능한 경사도
+            return True
+        else: # 창고 위치의 경사도가 허용가능하지 않은 경사도
+            return False
+    
+    ######## Adjust centroid to locations with available slope ########
+    def slope_adjust(self, point, slope):
+        merged_df = pd.merge(slope, point, how = "cross")
+        merged_df['distances'] = np.sqrt((merged_df['lon_x'] - merged_df['lon_y'])**2 + (merged_df['lat_x'] - merged_df['lat_y'])**2)
+
+        # 가장 가까이에 있는 경사도 괜찮은 좌표 확인
+        closest_point = merged_df.loc[merged_df['distances'].idxmin()]
+        slope_adjusted = closest_point[['lon_x','lat_x']]
+        slope_adjusted = slope_adjusted.rename({'lon_x': 'lon', 'lat_x': 'lat'})
+
+        return slope_adjusted
+    
+    ######## Check airspace overlapping ######
+    def airspace_check(self, point, *lon_lat_dicts):
+        air_check = []
+        for dict_ in lon_lat_dicts:
+            for region in dict_.keys():
+                pol = Polygon(dict_[str(region)])
+                pt = Point(point['lon'], point['lat'])
+                is_inside = pol.contains(pt)
+                air_check.append(is_inside)
+        if True in air_check:
+            return False
+        else:
+            return True
+
+    ########### Adjust centroid to location with available slope & non-restricted flight area ##################
+    def adjust_centroids(self, centroid_df, warehouse_df, slope, *lon_lat_dicts):
+    
+        closest_points_list = []
+
+        for k in range(len(centroid_df)):
+            warehouse_cluster = warehouse_df[warehouse_df['cluster'] == k][['lon', 'lat']]
+            centroid = centroid_df[centroid_df['cluster'] == k][['lon', 'lat']].values
+
+            # centroid 간 거리(euclidean) 구하기
+            distances = cdist(warehouse_cluster, centroid, metric='euclidean')
+            warehouse_cluster["distance"] = distances
+        
+            # centroid와 가까운 순으로 정렬
+            warehouse_cluster = warehouse_cluster.sort_values(by=['distance'], ascending = True).reset_index(drop = True)
+            
+            i = 0
+            while i < len(warehouse_cluster):
+                # 제일 가까운 창고부터 시작
+                closest_warehouse = pd.DataFrame(warehouse_cluster.loc[i,][["lon", "lat"]]).T
+                
+                # 만약 비행구역에 걸리면 그 다음으로 가까운 창고로 변경
+                if self.airspace_check(closest_warehouse, *lon_lat_dicts) == False:
+                    i += 1
+                    if i == len(warehouse_cluster):
+                    #closest_warehouse = pd.DataFrame(warehouse_cluster.loc[i,][["lon", "lat"]]).T
+                        break
+                
+                else: # 비행구역에 걸리지 않으면 경사도 체크
+                    if self.slope_check(closest_warehouse, slope) == False: #만약 경사도가 허용가능 X 경사도라면
+                        closest_warehouse = self.slope_adjust(closest_warehouse, slope)
+                        closest_warehouse['cluster'] = k
+                    break
+            
+            closest_points_list.append(closest_warehouse.to_dict())
+        
+        new_centroids_df = pd.DataFrame(closest_points_list)
+
+        return new_centroids_df
+
+    ###################################################### Silhouette Method ##########################################################
+    
     # Silhouette method to find optimal K value
-    def silhouette(self, max_k, save = False):
+    def silhouette(self, max_k, separate = False, save = False):
         # 1 ~ max_k까지의 수
         k = [i for i in range(2, max_k + 1)]
         warehouse = self.warehouse_df.copy()
 
-        # plt.subplots()으로 리스트에 기재된 클러스터링 수만큼의 sub figures를 가지는 axs 생성 
-        fig, ax = plt.subplots(figsize=(4*(max_k-1), 4), nrows=1, ncols=max_k-1)
-        
-        # 리스트에 기재된 클러스터링 갯수들을 차례로 iteration 수행하면서 실루엣 개수 시각화
-        for ind, n_cluster in enumerate(k):
-            
-            # KMeans 클러스터링 수행하고, 실루엣 스코어와 개별 데이터의 실루엣 값 계산. 
-            clusterer = KMeans(n_clusters = n_cluster, random_state=42)
+        if separate == True:
+           for ind, n_cluster in enumerate(k):
+            # Create a new figure for each cluster number
+            fig, ax = plt.subplots(figsize=(6, 6))
+
+            # KMeans 클러스터링 수행하고, 실루엣 스코어와 개별 데이터의 실루엣 값 계산.
+            clusterer = KMeans(n_clusters=n_cluster, random_state=42)
             cluster_labels = clusterer.fit_predict(warehouse)
-            
+
             sil_avg = silhouette_score(warehouse, cluster_labels)
             sil_values = silhouette_samples(warehouse, cluster_labels)
-            
+
             y_lower = 10
-            ax[ind].set_title('Number of Cluster : '+ str(n_cluster)+'\n' \
-                            'Silhouette Score :' + str(round(sil_avg,3)) )
-            ax[ind].set_xlabel("The silhouette coefficient values")
-            ax[ind].set_ylabel("Cluster label")
-            ax[ind].set_xlim([-0.1, 1])
-            ax[ind].set_ylim([0, len(warehouse) + (n_cluster + 1) * 10])
-            ax[ind].set_yticks([])  # Clear the yaxis labels / ticks
-            ax[ind].set_xticks([0, 0.2, 0.4, 0.6, 0.8, 1])
-            
-            # 클러스터링 갯수별로 fill_betweenx( )형태의 막대 그래프 표현. 
+            ax.set_title('Number of Cluster : ' + str(n_cluster) + '\n' \
+                        'Silhouette Score :' + str(round(sil_avg, 3)))
+            ax.set_xlabel("The silhouette coefficient values")
+            ax.set_ylabel("Cluster label")
+            ax.set_xlim([-0.1, 1])
+            ax.set_ylim([0, len(warehouse) + (n_cluster + 1) * 10])
+            ax.set_yticks([])  # Clear the yaxis labels / ticks
+            ax.set_xticks([0, 0.2, 0.4, 0.6, 0.8, 1])
+
+            # 클러스터링 갯수별로 fill_betweenx( )형태의 막대 그래프 표현.
             for i in range(n_cluster):
-                ith_cluster_sil_values = sil_values[cluster_labels==i]
+                ith_cluster_sil_values = sil_values[cluster_labels == i]
                 ith_cluster_sil_values.sort()
-                
+
                 size_cluster_i = ith_cluster_sil_values.shape[0]
                 y_upper = y_lower + size_cluster_i
-                
+
                 color = cm.nipy_spectral(float(i) / n_cluster)
-                ax[ind].fill_betweenx(np.arange(y_lower, y_upper), 0, ith_cluster_sil_values, \
-                                    facecolor=color, edgecolor=color, alpha=0.7)
-                ax[ind].text(-0.05, y_lower + 0.5 * size_cluster_i, str(i))
+                ax.fill_betweenx(np.arange(y_lower, y_upper), 0, ith_cluster_sil_values, \
+                                facecolor=color, edgecolor=color, alpha=0.7)
+                ax.text(-0.05, y_lower + 0.5 * size_cluster_i, str(i))
                 y_lower = y_upper + 10
-                
-            ax[ind].axvline(x=sil_avg, color="red", linestyle="--")
+
+                ax.axvline(x=sil_avg, color="red", linestyle="--") 
+
+            if save == True:
+                fig.savefig(f"silhouette_{n_cluster}.png", dpi = 500)
+
+        else:
+        # plt.subplots()으로 리스트에 기재된 클러스터링 수만큼의 sub figures를 가지는 axs 생성 
+            fig, ax = plt.subplots(figsize=(4*(max_k-1), 4), nrows=1, ncols=max_k-1)
         
-        if save == True:
-            fig.savefig(f"silhouette_{max_k}.png")
+            # 리스트에 기재된 클러스터링 갯수들을 차례로 iteration 수행하면서 실루엣 개수 시각화
+            for ind, n_cluster in enumerate(k):
+                # KMeans 클러스터링 수행하고, 실루엣 스코어와 개별 데이터의 실루엣 값 계산. 
+                clusterer = KMeans(n_clusters = n_cluster, random_state=42)
+                cluster_labels = clusterer.fit_predict(warehouse)
+                
+                sil_avg = silhouette_score(warehouse, cluster_labels)
+                sil_values = silhouette_samples(warehouse, cluster_labels)
+                
+                y_lower = 10
+                ax[ind].set_title('Number of Cluster : '+ str(n_cluster)+'\n' \
+                                'Silhouette Score :' + str(round(sil_avg,3)) )
+                ax[ind].set_xlabel("The silhouette coefficient values")
+                ax[ind].set_ylabel("Cluster label")
+                ax[ind].set_xlim([-0.1, 1])
+                ax[ind].set_ylim([0, len(warehouse) + (n_cluster + 1) * 10])
+                ax[ind].set_yticks([])  # Clear the yaxis labels / ticks
+                ax[ind].set_xticks([0, 0.2, 0.4, 0.6, 0.8, 1])
+                
+                # 클러스터링 갯수별로 fill_betweenx( )형태의 막대 그래프 표현. 
+                for i in range(n_cluster):
+                    ith_cluster_sil_values = sil_values[cluster_labels==i]
+                    ith_cluster_sil_values.sort()
+                    
+                    size_cluster_i = ith_cluster_sil_values.shape[0]
+                    y_upper = y_lower + size_cluster_i
+                    
+                    color = cm.nipy_spectral(float(i) / n_cluster)
+                    ax[ind].fill_betweenx(np.arange(y_lower, y_upper), 0, ith_cluster_sil_values, \
+                                        facecolor=color, edgecolor=color, alpha=0.7)
+                    ax[ind].text(-0.05, y_lower + 0.5 * size_cluster_i, str(i))
+                    y_lower = y_upper + 10
+                    
+                ax[ind].axvline(x=sil_avg, color="red", linestyle="--")
+        
+            if save == True:
+                fig.savefig(f"silhouette_{max_k}.png", dpi = 600)
         
         return sil_values, sil_avg
     
-     ###################################################### Elbow Method ##########################################################
+    ###################################################### Elbow Method ##########################################################
 
     def elbow(self, max_k, save = False):
         inertia = []
