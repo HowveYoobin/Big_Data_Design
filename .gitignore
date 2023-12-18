@@ -1,2 +1,7 @@
 *_Store
 *.gpkg
+*.log
+*.fls
+*.toc
+*.fdb_latexmk
+*.blg
