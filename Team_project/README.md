@@ -60,9 +60,14 @@ View visualized results of `mapping.ipynb` [here](https://nbviewer.org/github/Ho
   <figcaption align="center"><B>Figure 7.</B> Detailed locations of 3 vertiport candidates.</figcaption>
 </p>
 
----
+### 7. A relationship between warehouse size and the amount of delivery traffic in Hwaseong has been established by Linear Regression.
+* We established a linear relationship between warehouse width in Hwaseong and demand in order to assign weights to the data points (warehouse locations) on the map. (We utilized delivery data from Hwaseong since it was the only available dataset for delivery demand.)
+* We predicted the demand for each data point using the warehouse size and the aforementioned linear regression formula. Then, we represented the points on the map by overlaying them in proportion to their corresponding demand. This ensured that the centroid (vertiport candidates) would be located close to warehouses with higher demand.
 
-## We are working on...
-* Finding out the relationship between warehouse size and the amount of delivery traffic in Hwaseong.
-   * Reducing computational cost by using server
-* Preparing for the final-term presentation
+<p align="center">
+  <img src="./figures/linear_regression.png" alt="Linear Regression result(K=3)" align="center" width="50%">
+  <figcaption align="center"><B>Figure 7.</B> The linear regression equation for warehouse width(x) and demand(y) is expressed as follows: ${y = 46.67x − 75649.97}$</figcaption>
+</p>
+
+### 8. 
+---
