@@ -1,6 +1,6 @@
 # Team Project (Contributors: PYB(Leader), PCH, CSK, PJC, and KYJ)
 ## Goal: Vertiport Placement in Gyeongsangbuk-do and Daegu for efficient middle-mile consignment of fresh food
-See visualized results of `mapping.ipynb` [here](https://nbviewer.org/github/HowveYoobin/Big_Data_Design/blob/main/Team_project/mapping.ipynb)  
+View visualized results of `mapping.ipynb` [here](https://nbviewer.org/github/HowveYoobin/Big_Data_Design/blob/main/Team_project/mapping.ipynb)  
 
 1. [Completed](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Team_project/README.md#completed)  
    1.1. [Background Research](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Team_project/README.md#1-background-research)  
@@ -47,7 +47,7 @@ See visualized results of `mapping.ipynb` [here](https://nbviewer.org/github/How
   <figcaption align="center"><B>Figure 5.</B> Locations of the vertiport candidates(red X) were marked on the left map. The locations of the vertiport candidates(red X) and places with unavailable slopes(gray point) were marked on the right map. New TK airport was indicated as a black star.</figcaption>
 </p>
 
-* Detailed inspection for selected vertiport candidates by folium.
+* Detailed inspection for selected vertiport candidates were conducted using folium.
 <p align="center">
   <img src="./figures/ref_centroids.png" alt="Kmeans result(K=3) visualized by folium" align="center">
   <figcaption align="center"><B>Figure 6.</B> Selected Vertiport candidates marked on folium map. Star(red) = vertiport candidates. Plane(blue) = TK new airport</figcaption>
