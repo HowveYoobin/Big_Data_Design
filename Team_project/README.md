@@ -16,12 +16,16 @@ View visualized results of `mapping.ipynb` [here](https://nbviewer.org/github/Ho
 
 ---
 # Summarized Process
-* This is a simple description of the project. If you want more detailed and formal description of process,
+* **This is a simple description of the project. If you want more detailed and formal description of process**,
   *  View project proposal from [here](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Proposal/vertiport_final_proposal.pdf)
   *  View project final presentation(.pdf) [here](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Team_project/Final_presentation.pdf)
 
 ### 1. Background Research
 ### 2. Scoped down the project topic and collected related data.
+* Administrative area of South Korea is available at [GIS Developer](http://www.gisdeveloper.co.kr/?p=2332)
+* Restricted-, limited-, and dangered flight areas are available at [Vworld](https://www.vworld.kr/v4po_main.do)
+* CJ Hwaseong Delivery Data (for demand prediction) - This data is not opened for public
+* Warehouse location data is available at [National Logistics Information Center](https://www.nlic.go.kr/nlic/front.action)
 ### 3. Mapped prohibited-, restricted-, and dangered- flight areas on the map of Gyeongsangbuk-do(w.o. Ulleung-do) and Daegu with Vworld API.  
 <figure>
     <img src="./figures/no_ulleung_label.png" alt="No-flight zones"/>
@@ -75,7 +79,7 @@ View visualized results of `mapping.ipynb` [here](https://nbviewer.org/github/Ho
    4. We ignored the accessibility from the ground traffic.
 
 ### 7. A relationship between warehouse size and the amount of delivery traffic in Hwaseong has been established by Linear Regression.
-* We established a linear relationship between warehouse width in Hwaseong and demand in order to assign weights to the data points (warehouse locations) on the map. (We couldn't utilize delivery data from Gyeongsangbuk-do since the data from Hwaseong was the only available dataset for delivery demand.)
+* We assumed that the delivery volume of a warehouse is linearly related to its width. Consequently, we established a linear relationship between the warehouse width in Hwaseong and the demand to assign weights to the data points (warehouse locations) on the map. Unfortunately, we couldn't utilize delivery data from Gyeongsangbuk-do as the dataset from Hwaseong was the only available source for delivery demand.
 
 $$
 {y = 46.67x − 75649.97}
@@ -115,14 +119,14 @@ $$
 * Detailed inspection was conducted by Google map using resulted vertiport candidate coordinates.
 
 <p align="center">
-  <img src="/Proposal/figure/K2.png" alt="Final vertiport candidates(K=2)" align="center" width="50%">
-  <img src="/Proposal/figure/K2_gm.png" alt="inspection by google map(K=2)" align="center" width="50%">
+  <img src="/Proposal/figure/K2.png" alt="Final vertiport candidates(K=2)" align="center" width="49%">
+  <img src="/Proposal/figure/K2_gm.png" alt="inspection by google map(K=2)" align="center" width="49%">
   <figcaption align="center"><B>Figure 12.</B> Final vertiport candidates were determined (K = 2, Elbow method & Silhouette method). </figcaption>
 </p>
 
 <p align="center">
-  <img src="/Proposal/figure/K3.png" alt="Final vertiport candidates(K=3)" align="center" width="50%">
-  <img src="/Proposal/figure/K3_gm.png" alt="inspection by google map(K=3)" align="center" width="50%">
+  <img src="/Proposal/figure/K3.png" alt="Final vertiport candidates(K=3)" align="center" width="49%">
+  <img src="/Proposal/figure/K3_gm.png" alt="inspection by google map(K=3)" align="center" width="49%">
   <figcaption align="center"><B>Figure 13.</B> Final vertiport candidates were determined (K = 3, Eye inspection). </figcaption>
 </p>
 
