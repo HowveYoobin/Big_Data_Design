@@ -2,9 +2,16 @@
 ## Goal: Vertiport Placement in Gyeongsangbuk-do and Daegu for efficient middle-mile consignment of fresh food
 
 ## Contributors
-PYB(Leader), PCH, CSK, PJC, and KYJ
+
+|Name|Major|E-mail address|Role|
+|:--:|:---:|:------------:|:--:|
+|Yoobin Park|Life Science & AI|yoobinpark@handong.ac.kr|Leader|
+|Chungho Park|Communication & Data Science|21600313@handong.ac.kr|member|
+|Juchan Lee|ICT Convergence|dlwncks@handong.ac.kr|member|
+|Shinkook Cha|Life Science & AI|22000741@handong.ac.kr|member|
+|Yujin Kim|Life Science & AI|22100163@handong.ac.kr|member|
 ---
-## Refer these sources for detailed process of the project.
+
 View visualized results of `mapping.ipynb` [here](https://nbviewer.org/github/HowveYoobin/Big_Data_Design/blob/main/Team_project/mapping.ipynb) 
 
 ---
@@ -83,7 +90,7 @@ $$
 * We predicted the demand for each data point using the warehouse size and the aforementioned linear regression formula. Then, we represented the points on the map by overlaying them in proportion to their corresponding demand. This ensured that the centroid (vertiport candidates) would be located close to warehouses with higher demand.
 
 <p align="center">
-  <img src="../../Proposal/figure/basic.png" alt="" align="center" width="50%">
+  <img src="/Proposal/figure/basic.png" alt="" align="center" width="50%">
   <figcaption align="center"><B>Figure 9. Locations of the warehouses(blue point) and new TK airport(star), and available slopes(yellow) are marked. The intensity of the blue color represents the level of demand. </B> </figcaption>
 </p>
 
@@ -91,9 +98,9 @@ $$
 * K was determined by eye inspection and integrated result of sillhouette method and elbow method. We determined 3 clusters of warehouses by eye inspection like before, and K = 2 was resulted by sillhouette method and elbow method.
   
 <p align="center">
-  <img src="../../Proposal/figure/eye_inspection.png" alt="Eye inspection" align="center" width="40%">
-  <img src="../../Proposal/figure/elbow.png" alt="Elbow method" align="center" width="40%">
-  <img src="../../Proposal/figure/sillhouette_2.png" alt="sillhouette method" align="center" width="40%">
+  <img src="/Proposal/figure/eye_inspection.png" alt="Eye inspection" align="center" width="40%">
+  <img src="/Proposal/figure/elbow.png" alt="Elbow method" align="center" width="40%">
+  <img src="/Proposal/figure/sillhouette_2.png" alt="sillhouette method" align="center" width="40%">
   <figcaption align="center"><B>Figure 10.</B> Optimal K was determined by eye inspection (K = 3), elbow method, and sillhouette method (K = 2)</figcaption>
 </p>
 
@@ -109,13 +116,13 @@ $$
 
 <p align="center">
   <img src="/Proposal/figure/K2.png" alt="Final vertiport candidates(K=2)" align="center" width="50%">
-  <img src="../../Proposal/figure/K2_gm.png" alt="inspection by google map(K=2)" align="center" width="50%">
+  <img src="/Proposal/figure/K2_gm.png" alt="inspection by google map(K=2)" align="center" width="50%">
   <figcaption align="center"><B>Figure 12.</B> Final vertiport candidates were determined (K = 2, Elbow method & Silhouette method). </figcaption>
 </p>
 
 <p align="center">
-  <img src="../../Proposal/figure/K3.png" alt="Final vertiport candidates(K=3)" align="center" width="50%">
-  <img src="../../Proposal/figure/K3_gm.png" alt="inspection by google map(K=3)" align="center" width="50%">
+  <img src="/Proposal/figure/K3.png" alt="Final vertiport candidates(K=3)" align="center" width="50%">
+  <img src="/Proposal/figure/K3_gm.png" alt="inspection by google map(K=3)" align="center" width="50%">
   <figcaption align="center"><B>Figure 13.</B> Final vertiport candidates were determined (K = 3, Eye inspection). </figcaption>
 </p>
 
