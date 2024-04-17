@@ -101,14 +101,14 @@ $$
 * We added constraints, such as slopes and territory boundaries, to prevent the assignment of candidates to unavailable locations. Additionally, we ensured that centroids moved to the closest warehouse to guarantee accessibility from ground traffic.
 
 <p align="center">
-  <img src="./figures/adjust.png" alt="adjustment" align="center" width="50%">
+  <img src="./figures/adjust.png" alt="adjustment" align="center" width="100%">
   <figcaption align="center"><B>Figure 11. Constraints were added. </B> </figcaption>
 </p>
 
 * Detailed inspection was conducted by Google map using resulted vertiport candidate coordinates.
 
 <p align="center">
-  <img src="../../Proposal/figure/K2.png" alt="Final vertiport candidates(K=2)" align="center" width="50%">
+  <img src="/Proposal/figure/K2.png" alt="Final vertiport candidates(K=2)" align="center" width="50%">
   <img src="../../Proposal/figure/K2_gm.png" alt="inspection by google map(K=2)" align="center" width="50%">
   <figcaption align="center"><B>Figure 12.</B> Final vertiport candidates were determined (K = 2, Elbow method & Silhouette method). </figcaption>
 </p>
@@ -124,6 +124,6 @@ $$
 * We created a 'What if' scenario to compare the travel time of middle-mile delivery by ground traffic and UAM.
 * We found out one of our vertiport candidates can reduce the travel time by 56.6% compared to the existing middle-mile delivery method. (We did not consider sky path for this scenario)
 <p align="center">
-  <img src="./figures/adjust.png" alt="adjustment" align="center" width="50%">
+  <img src="./figures/scenario.png" alt="As is vs to be" align="center" width="100%">
   <figcaption align="center"><B>Figure 14. As is vs To be Scenario </B> </figcaption>
 </p>
