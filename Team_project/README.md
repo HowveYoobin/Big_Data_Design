@@ -1,5 +1,4 @@
-# Team Project 
-## Goal: Vertiport Placement in Gyeongsangbuk-do and Daegu for efficient middle-mile consignment of fresh food
+# Team Project: Vertiport Placement in Gyeongsangbuk-do and Daegu for efficient middle-mile consignment of fresh food
 
 ## Contributors
 
@@ -15,7 +14,7 @@
 View visualized results of `mapping.ipynb` [here](https://nbviewer.org/github/HowveYoobin/Big_Data_Design/blob/main/Team_project/mapping.ipynb) 
 
 ---
-# Summarized Process
+## Summarized Process
 * **This is a simple description of the project. If you want more detailed and formal description of process**,
   *  View project proposal from [here](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Proposal/vertiport_final_proposal.pdf)
   *  View project final presentation(.pdf) [here](https://github.com/HowveYoobin/Big_Data_Design/blob/main/Team_project/Final_presentation.pdf)
